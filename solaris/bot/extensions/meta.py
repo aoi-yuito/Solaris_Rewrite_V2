@@ -460,7 +460,7 @@ async def source_command(ctx: lightbulb.context.base.Context):
             fields=(
                 (
                     "Available under the GPLv3 license",
-                    "Click [here](https://github.com/parafoxia/Solaris) to view the original project and [here](https://github.com/parafoxia/Solaris) to view the re-written project.",
+                    "Click [here](https://github.com/parafoxia/Solaris) to view the original project and [here](https://github.com/Aoi-Yuito/Solaris_Rewrite_V2) to view the re-written project.",
                     False,
                 ),
             ),
