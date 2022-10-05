@@ -1,5 +1,6 @@
 # Blue Brain - A Discord bot designed to make your server a safer and better place.
-# Copyright (C) 2020  Sarker Istiyak Mahmud
+# Copyright (C) 2020-2021  Ethan Henderson
+# Copyright (C) 2021-present  Aoi Yuito
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Sarker Istiyak Mahmud
-# kiyotaka.ayanokouji.ehou@gmail.com
+# Ethan Henderson (Original author)
+# parafoxia@carberra.xyz
+
+# Aoi Yuito (Rewritten author)
+# aoi.yuito.ehou@gmail.com
 
 from pathlib import Path
 

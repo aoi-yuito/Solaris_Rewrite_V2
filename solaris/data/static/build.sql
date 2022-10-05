@@ -1,5 +1,6 @@
 -- Solaris - A Discord bot designed to make your server a safer and better place.
--- Copyright (C) 2020  Ethan Henderson
+-- Copyright (C) 2020-2021  Ethan Henderson
+-- Copyright (C) 2021-present  Aoi Yuito
 
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by

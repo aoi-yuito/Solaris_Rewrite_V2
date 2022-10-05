@@ -1,9 +1,9 @@
 # Solaris
 ## A Discord bot designed to make your server a safer and better place.
-Solaris was built using more than 2 years of bot building experience to be the definitive word in server security. Bundled with plenty of powerful features, and with many more planned for the future, it's been designed to do all the things other moderation bots don't.
+Solaris was built using more than 2 years of bot building experience to be the definitive word in server security. Bundled with plenty of powerful features, and with many more planned for the future, it's been designed to do all the things other moderation bots don't. Special thanks to those who helped me in building this bot. Note that this is just a re-written version of the original bot [Solaris](https://github.com/parafoxia/Solaris) and the original author of this project is [Parafoxia](https://github.com/parafoxia). Once again thank you very much if you liked my work!
 
 ## T&Cs just got interesting.
-If you ever wished you could hire a bouncer for your server, Solaris might be just what you're looking for. Special thanks to those who helped me in building this bot. Note that this is just a re-written version of the original bot [Solaris](https://github.com/parafoxia/Solaris) and the original author of this project is [Parafoxia](https://github.com/parafoxia). Once again thank you very much if you liked my work!
+If you ever wished you could hire a bouncer for your server, Solaris might be just what you're looking for.
 
 - Make spam bots and excuses from rulebreaking members a thing of the past. A powerful gateway / verification system makes sure new members accept the rules before being able to talk in the server, and personally deals with those who don't.
 - Add your own personal touch with tonnes of customisation options. Whether you want customisable messages, including separate messages for humans and bots, or the ability to set multiple member roles, Solaris has you covered.
@@ -41,7 +41,7 @@ Again, the old timers are present:
 If you liked the sound of all the above features, well, we're only just getting started. With plans to provide the ability to back up server configurations, include a dynamic warning system, and account for the most urgent situations with a lockdown system, there's a lot to keep your eyes open for!
 
 # Cloning and running
-I would greatly prefer if you invited Solaris to your server [here](https://discordapp.com/oauth2/authorize?client_id=661972684153946122&scope=bot&permissions=8) rather than run your own instance. With that being said, you are able to clone Solaris to your machine in order to test it or contribute.
+You are able to clone Solaris to your machine in order to test it or contribute.
 
 Solaris was also not designed with universal compatibility in mind. If you want to include sections of Solaris' code in your own program, you will likely need to make significant modifications. Make sure you abide by the terms of the license, which you can find in LICENSE.
 
@@ -115,6 +115,3 @@ You should be able to run Solaris using this method on any OS.
 ### Running
 1. `cd` into the root directory (the one with this README in it).
 2. Run `py -3 -m solaris`.
-
-# Links
-[Invite Solaris to your server](https://discordapp.com/oauth2/authorize?client_id=661972684153946122&scope=bot&permissions=8) • [Invite Solaris to your server (non-admin privileges)](https://discordapp.com/oauth2/authorize?client_id=661972684153946122&scope=bot&permissions=403008598) • [Join the Solaris support server](https://discord.gg/c3b4cZs) • [See Solaris in action](https://discord.carberra.xyz)
