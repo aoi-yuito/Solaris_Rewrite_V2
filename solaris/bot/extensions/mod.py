@@ -1273,7 +1273,7 @@ async def delete_category_command(ctx: lightbulb.context.base.Context):
             if ctx.bot.cache.get_guild_channel(tc).parent_id == target.id:
                 await ctx.bot.cache.get_guild_channel(tc).delete()
             #await ctx.bot.cache.get_guild_channel(tc).delete(reason=f"{reason} - Actioned by {ctx.author.username}")
-                await target.delete()
+        await target.delete()
         #await target.delete(reason=f"{reason} - Actioned by {ctx.author.username}")
 
         if not ctx_in_targets:

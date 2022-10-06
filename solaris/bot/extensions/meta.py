@@ -264,7 +264,7 @@ class LeavingMenu(menu.SelectionMenu):
             ),
             "thumbnail": ctx.bot.get_me().avatar_url,
         }
-        super().__init__(ctx, ["832160810738253834", "832160894079074335", "796345797112365107"], pagemap, timeout=120.0)
+        super().__init__(ctx, [str(Config.ACCEPT_EMOJI_ID), str(Config.CANCEL_EMOJI_ID), str(Config.INFO_EMOJI_ID)], pagemap, timeout=120.0)
 
     async def start(meta):
         r = await super().start()

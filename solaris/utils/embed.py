@@ -46,7 +46,7 @@ class EmbedConstructor:
             timestamp=datetime.now().astimezone(),
         )
 
-        embed.set_author(name=kwargs.get("header", "Blue Brain"))
+        embed.set_author(name=kwargs.get("header", "Solaris"))
         embed.set_footer(
             text=kwargs.get("footer", f"Invoked by {ctx.author.username}" if ctx else r"\o/"),
             icon=ctx.author.avatar_url if ctx else self.bot.get_me().avatar_url,
