@@ -906,8 +906,10 @@ async def timeout_add_command(ctx: lightbulb.context.base.Context):
                         reason=f"{ctx.options.reason} - Actioned by {ctx.author.username}"
                     )
                     count += 1
-                except hikari.NotFoundError:
-                    pass
+                except hikari.ForbiddenError:
+                    await ctx.respond(
+                        f"{ctx.bot.cross} Failed to timeout {target.mention} as their permission set is superior to Solaris'."
+                    )
 
         if count > 0:
             await ctx.respond(f"{ctx.bot.tick} Timeout is not set to `{ctx.options.duration}` day(s) for {count:,} member(s).")
@@ -936,8 +938,10 @@ async def timeout_remove_command(ctx: lightbulb.context.base.Context):
                         reason=f"{ctx.options.reason} - Actioned by {ctx.author.username}"
                     )
                     count += 1
-                except hikari.NotFoundError:
-                    pass
+                except hikari.ForbiddenError:
+                    await ctx.respond(
+                        f"{ctx.bot.cross} Failed to timeout {target.mention} as their permission set is superior to Solaris'."
+                    )
                 
             elif target.communication_disabled_until() is None:
                 await ctx.respond(f"{ctx.bot.info} {target.mention} is not under any timeout, so skipping {target.mention}...")

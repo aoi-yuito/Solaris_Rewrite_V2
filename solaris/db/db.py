@@ -67,9 +67,6 @@ class Database:
             "INSERT OR IGNORE INTO gateway (GuildID) VALUES (?)", [(g.id,) for g in my_guilds]
         )
         await self.executemany("INSERT OR IGNORE INTO warn (GuildID) VALUES (?)", [(g.id,) for g in my_guilds])
-        await self.executemany(
-            "INSERT OR IGNORE INTO tickets (GuildID) VALUES (?)", [(g.id,) for g in my_guilds]
-        )
 
         # Remove.
         stored = await self.column("SELECT GuildID FROM system")
@@ -78,7 +75,6 @@ class Database:
         await self.executemany("DELETE FROM system WHERE GuildID = ?", removals)
         await self.executemany("DELETE FROM gateway WHERE GuildID = ?", removals)
         await self.executemany("DELETE FROM warn WHERE GuildID = ?", removals)
-        await self.executemany("DELETE FROM tickets WHERE GuildID = ?", removals)
 
         # Commit.
         await self.commit()

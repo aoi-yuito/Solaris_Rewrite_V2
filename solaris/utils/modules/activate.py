@@ -23,15 +23,15 @@
 
 import lightbulb
 
+from solaris import Config
 from solaris.utils.modules import retrieve
-from solaris.bot.extensions.tickets import OpenTicket
 
 
 async def gateway(ctx):
     async with ctx.get_channel().trigger_typing():
         active, rc_id, br_id, gt = (
             await ctx.bot.db.record(
-                "SELECT Active, RulesChannelID, BlockingRoleID, GateText FROM gateway WHERE GuildID = ?", ctx.get_guild().id
+                "SELECT Active, RulesChannelID, BlockingRoleID, GateText FROM gateway WHERE GuildID = ?", ctx.guild_id
             )
             or [None] * 4
         )
@@ -68,8 +68,8 @@ async def gateway(ctx):
             )
             
             emoji = []
-            emoji.append(ctx.bot.cache.get_emoji(832160810738253834))
-            emoji.append(ctx.bot.cache.get_emoji(832160894079074335))
+            emoji.append(ctx.bot.cache.get_emoji(Config.ACCEPT_EMOJI_ID))
+            emoji.append(ctx.bot.cache.get_emoji(Config.CANCEL_EMOJI_ID))
             
             for em in emoji:
                 await gm.add_reaction(em)

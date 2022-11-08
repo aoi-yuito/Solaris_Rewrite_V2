@@ -61,7 +61,7 @@ async def tag_command(ctx: lightbulb.context.base.Context) -> None:
     if any(c not in ascii_lowercase for c in ctx.options.tag_name):
         return await ctx.respond(f"{ctx.bot.cross} Tag identifiers can only contain lower case letters.")
 
-    tag_names= await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
+    tag_names= await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
 
     cache = []
 
@@ -70,10 +70,10 @@ async def tag_command(ctx: lightbulb.context.base.Context) -> None:
         for x in range(len(tag_names)):
             if tag_names[x][0] == ctx.options.tag_name[0]:
                 cache.append(tag_names[x])
-        await ctx.respond(ctx.bot.info + "Did you mean..." + "'\n'.join(cache)" + "?")
+        await ctx.respond(ctx.bot.info + "Did you mean..." + '\n'.join(cache) + "?")
 
     else:
-        content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name)
+        content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name)
         await ctx.respond(content)
 
 
@@ -125,20 +125,20 @@ async def tag_create(ctx: lightbulb.context.base.Context) -> None:
             f"{ctx.bot.cross} Tag identifiers must not exceed `{MAX_TAGNAME_LENGTH}` characters in length."
         )
 
-    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
+    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
 
     #if len(tag_names) == MAX_TAGS:
         #return await ctx.send(f"{ctx.bot.cross} You can only set up to {MAX_TAGS} warn types.")
 
     if ctx.options.tag_name in tag_names:
-        prefix = await ctx.bot.prefix(ctx.get_guild().id)
+        prefix = await ctx.bot.prefix(ctx.guild_id)
         return await ctx.respond(
             f"{ctx.bot.cross} That tag already exists. You can use `{prefix}tag edit {ctx.options.tag_name}`"
         )
 
     await ctx.bot.db.execute(
         "INSERT INTO tags (GuildID, UserID, TagID, TagName, TagContent) VALUES (?, ?, ?, ?, ?)",
-        ctx.get_guild().id,
+        ctx.guild_id,
         ctx.author.id,
         ctx.bot.generate_id(),
         ctx.options.tag_name.strip(),
@@ -158,14 +158,14 @@ async def tag_edit(ctx: lightbulb.context.base.Context) -> None:
     if any(c not in ascii_lowercase for c in ctx.options.tag_name):
         return await ctx.repond(f"{ctx.bot.cross} Tag identifiers can only contain lower case letters.")
 
-    user_id, tag_id = await ctx.bot.db.record("SELECT UserID, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name)
+    user_id, tag_id = await ctx.bot.db.record("SELECT UserID, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name)
 
     if user_id != ctx.author.id:
         return await ctx.repond(f"{ctx.bot.cross} You can't edit others tags. You can only edit your own tags.")
 
     else:
-        tag_content = await ctx.bot.db.column("SELECT TagContent FROM tags WHERE GuildID = ?", ctx.get_guild().id)
-        tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
+        tag_content = await ctx.bot.db.column("SELECT TagContent FROM tags WHERE GuildID = ?", ctx.guild_id)
+        tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
 
         if ctx.options.tag_name not in tag_names:
             return await ctx.repond(f'{ctx.bot.cross} The tag `{ctx.options.tag_name}` does not exist.')
@@ -176,7 +176,7 @@ async def tag_edit(ctx: lightbulb.context.base.Context) -> None:
         await ctx.bot.db.execute(
             "UPDATE tags SET TagContent = ? WHERE GuildID = ? AND TagName = ?",
             ctx.options.content,
-            ctx.get_guild().id,
+            ctx.guild_id,
             ctx.options.tag_name,
         )
 
@@ -195,13 +195,13 @@ async def tag_delete_command(ctx: lightbulb.context.base.Context) -> None:
     if any(c not in ascii_lowercase for c in ctx.options.tag_name):
         return await ctx.respond(f"{ctx.bot.cross} Tag identifiers can only contain lower case letters.")
 
-    user_id, tag_id = await ctx.bot.db.record("SELECT UserID, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name)
+    user_id, tag_id = await ctx.bot.db.record("SELECT UserID, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name)
 
     if user_id != ctx.author.id:
         return await ctx.respond(f"{ctx.bot.cross} You can't delete others tags. You can only delete your own tags.")
 
     modified = await ctx.bot.db.execute(
-        "DELETE FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name
+        "DELETE FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name
     )
 
     if not modified:
@@ -225,7 +225,7 @@ async def tag_info_command(ctx: lightbulb.context.base.Context) -> None:
     if ctx.options.tag_name not in tag_names:
         return await ctx.respond(f'{ctx.bot.cross} The Tag `{ctx.options.tag_name}` does not exist.')
 
-    user_id, tag_id, tag_time = await ctx.bot.db.record("SELECT UserID, TagID, TagTime FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name)
+    user_id, tag_id, tag_time = await ctx.bot.db.record("SELECT UserID, TagID, TagTime FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name)
 
     user = await ctx.bot.grab_user(user_id)
     
@@ -255,9 +255,9 @@ async def member_tag_list_command(ctx: lightbulb.context.base.Context) -> None:
     target = ctx.options.target or ctx.author
 
     prefix = await ctx.bot.prefix(ctx.get_guild().id)
-    all_tags = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
-    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ? AND UserID = ?", ctx.get_guild().id, target.id)
-    tag_all = await ctx.bot.db.records("SELECT Tagname, TagID FROM tags WHERE GuildID = ? AND UserID = ?", ctx.get_guild().id, target.id)
+    all_tags = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
+    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ? AND UserID = ?", ctx.guild_id, target.id)
+    tag_all = await ctx.bot.db.records("SELECT Tagname, TagID FROM tags WHERE GuildID = ? AND UserID = ?", ctx.guild_id, target.id)
     if len(tag_names) == 0:
         if target == ctx.author:
             return await ctx.respond(f"{ctx.bot.cross} You don't have any tag list.")
@@ -270,7 +270,7 @@ async def member_tag_list_command(ctx: lightbulb.context.base.Context) -> None:
         pagemaps = []
 
         for tag_name, tag_id in sorted(tag_all):
-            content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, tag_name)
+            content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, tag_name)
             first_step = content
             pagemaps.append(
                 {
@@ -313,13 +313,13 @@ async def raw_command(ctx: lightbulb.context.base.Context) -> None:
     if any(c not in ascii_lowercase for c in ctx.options.tag_name):
         return await ctx.respond(f"{ctx.bot.cross} Tag identifiers can only contain lower case letters.")
 
-    tag_content = await ctx.bot.db.column("SELECT TagContent FROM tags WHERE GuildID = ?", ctx.get_guild().id)
-    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
+    tag_content = await ctx.bot.db.column("SELECT TagContent FROM tags WHERE GuildID = ?", ctx.guild_id)
+    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
 
     if ctx.options.tag_name not in tag_names:
         return await ctx.respond(f'{ctx.bot.cross} The Tag `{ctx.options.tag_name}` does not exist.')
 
-    content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, ctx.options.tag_name)
+    content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, ctx.options.tag_name)
 
     first_step = markdown.escape_markdown(content)
     await ctx.respond(first_step.replace('<', '\\<'))
@@ -332,14 +332,14 @@ async def raw_command(ctx: lightbulb.context.base.Context) -> None:
 @lightbulb.implements(commands.prefix.PrefixSubCommand)
 async def tags_list_command(ctx: lightbulb.context.base.Context) -> None:
     prefix = await ctx.bot.prefix(ctx.get_guild().id)
-    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.get_guild().id)
-    records = await ctx.bot.db.records("SELECT TagName, TagID FROM tags WHERE GuildID = ?", ctx.get_guild().id)
+    tag_names = await ctx.bot.db.column("SELECT TagName FROM tags WHERE GuildID = ?", ctx.guild_id)
+    records = await ctx.bot.db.records("SELECT TagName, TagID FROM tags WHERE GuildID = ?", ctx.guild_id)
 
     try:
         pagemaps = []
 
         for tag_name, tag_id in sorted(records):
-            content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.get_guild().id, tag_name)
+            content, tag_id = await ctx.bot.db.record("SELECT TagContent, TagID FROM tags WHERE GuildID = ? AND TagName = ?", ctx.guild_id, tag_name)
             first_step = content
             pagemaps.append(
                 {

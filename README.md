@@ -109,7 +109,7 @@ You should be able to run Solaris using this method on any OS.
 4. Run `py -3 -m pip install poetry`.
     - You may need to use a different `pip` command depending on your Python configuration.
 5. Run `py -3 -m venv ./.venv`.
-6. Run `./.venv/Scripts/activate`.
+6. Run `source ./.venv/bin/activate`.
 7. Run `poetry install`.
 
 ### Running
