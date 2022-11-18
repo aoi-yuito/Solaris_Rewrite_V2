@@ -338,7 +338,7 @@ class Synchronise:
             if user in accepted:
                 await gm.remove_reaction(emoji=gm.reactions[1].emoji.name, emoji_id=gm.reactions[1].emoji.id, user=user)
 
-    async def on_boot(self):
+    async def on_boot_sync(self):
         last_commit = chron.from_iso(await self.bot.db.field("SELECT Value FROM bot WHERE Key = 'last commit'"))
         records = await self.bot.db.records(
             "SELECT GuildID, RulesChannelID, GateMessageID, BlockingRoleID, MemberRoleIDs, ExceptionRoleIDs FROM gateway WHERE Active = 1"
@@ -388,6 +388,7 @@ gateway = lightbulb.plugins.Plugin(
 @gateway.listener(hikari.StartedEvent)
 async def on_started(event: hikari.StartedEvent):
     if not gateway.bot.ready.booted:
+        await Synchronise(None, gateway.bot).on_boot_sync()
         gateway.bot.ready.up(gateway)
 
     gateway.d.configurable: bool = True
